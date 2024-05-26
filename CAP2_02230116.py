@@ -52,11 +52,11 @@ class PersonalAcc(Account):
 
 # This block of code generates the random account number. All the account numbers will start from 223
 def generate_account_num():
-    return "2233" + ''.join(random.choices(string.digits, k=1))
+    return "2233" + ''.join(random.choices(string.digits, k=5))
 
 # After creating the account, this generates a password
 def generate_password():
-    return ''.join(random.choices(string.ascii_letters + string.digits, k=2))
+    return ''.join(random.choices(string.ascii_letters + string.digits, k=8))
 
 # After creating the account, those data should be saved. Therefore, this block of codes saves the data in account.txt file
 def save_account_in_txt_file(accounts):
