@@ -38,20 +38,20 @@ class Account:
         print(f"You Withdrew {amount}. New balance: {self.balance}")
         return True
 
-# The class BusinessAccount is created inheriting the attributes and methods from parent class Account and
+# The class BusinessAcc is created for Business Account inheriting the attributes and methods from parent class Account and
 # the accountType is set to Business here
-class BusinessAccount(Account):
+class BusinessAcc(Account):
     def __init__(self, accountHolder, accountNumber, password, balance=0.0):
         super().__init__(accountHolder, accountNumber, password, "Business", balance)
 
-# Same as above, the class PersonalAccount is created inheriting the attributes and methods from parent class Account and
+# Same as above, the class PersonalAcc is created for personal account inheriting the attributes and methods from parent class Account and
 # the accountType is set Personal
-class PersonalAccount(Account):
+class PersonalAcc(Account):
     def __init__(self, accountHolder, accountNumber, password, balance=0.0):
         super().__init__(accountHolder, accountNumber, password, "Personal", balance)
 
 # This block of code generates the random account number. All the account numbers will start from 223
-def generate_account_number():
+def generate_account_num():
     return "2233" + ''.join(random.choices(string.digits, k=1))
 
 # After creating the account, this generates a password
@@ -59,7 +59,7 @@ def generate_password():
     return ''.join(random.choices(string.ascii_letters + string.digits, k=2))
 
 # After creating the account, those data should be saved. Therefore, this block of codes saves the data in account.txt file
-def save_account(accounts):
+def save_account_in_txt_file(accounts):
     with open("accounts.txt", "w") as bank_acc_file:
         for account in accounts.values():
             bank_acc_file.write(f"{account.accountHolder},{account.accountNumber},{account.password},{account.accountType},{account.balance}\n")
@@ -77,23 +77,23 @@ def load_accounts():
                 accountHolder, accountNumber, password, accountType, balance = line.strip().split(",")
                 balance = float(balance)
                 if accountType == "Business":
-                    accounts[accountNumber] = BusinessAccount(accountHolder, accountNumber, password, balance)
+                    accounts[accountNumber] = BusinessAcc(accountHolder, accountNumber, password, balance)
                 elif accountType == "Personal":
-                    accounts[accountNumber] = PersonalAccount(accountHolder, accountNumber, password, balance)
+                    accounts[accountNumber] = PersonalAcc(accountHolder, accountNumber, password, balance)
     return accounts
 
 # This function will be used to delete the account
-def delete_account(accounts, accountNumber):
+def delete_acc(accounts, accountNumber):
     if accountNumber in accounts:
         del accounts[accountNumber]
-        save_account(accounts)
+        save_account_in_txt_file(accounts)
         print("Successfully Deleted the Account.")
     else:
         print("Account Not Found.")
 
 # This function is for logging in the account rendering account number and password
 def login(accounts):
-    accountNumber = input("Enter Account Number: ")
+    accountNumber = input("Enter Your Account Number: ")
     password = input("Enter Password: ")
     account = accounts.get(accountNumber)
     # This block of conditional statement is very important as it checks whether the account number and password matches or not. If it does, it
@@ -117,7 +117,7 @@ def transfer_money(accounts, sender_account):
         return
     if sender_account.withdraw(amount):
         receiver_account.deposit(amount)
-        save_account(accounts)
+        save_account_in_txt_file(accounts)
         print(f"\n Transfer Successful. {amount} Amount transferred to {receiver_account.accountHolder} ")
 
 # It is the main block where every function and object created above will be used here
@@ -136,18 +136,18 @@ def main():
         if user_choice == "1":
             accountType = input("Enter Account Type (B fot Business/ P for Personal): ").lower()
             accountHolder = input("Enter Your Name: ")
-            accountNumber = generate_account_number()
+            accountNumber = generate_account_num()
             password = generate_password()
             if accountType == "b":
-                new_account = BusinessAccount(accountHolder, accountNumber, password)
+                new_account = BusinessAcc(accountHolder, accountNumber, password)
             elif accountType == "p":
-                new_account = PersonalAccount(accountHolder, accountNumber, password)
+                new_account = PersonalAcc(accountHolder, accountNumber, password)
             else:
                 # Prints out invalid message if invalid input is given
                 print("Invalid Account Type.")
                 continue
             accounts[accountNumber] = new_account
-            save_account(accounts)
+            save_account_in_txt_file(accounts)
             print(f"Congratulations, Account Successfully Created. Name: {accountHolder}, Account number: {accountNumber}, Password: {password}")
 
         # If user's input is "2", it is section for the login
@@ -164,15 +164,15 @@ def main():
                     elif action == "2":
                         amount = float(input("Enter Amount To Deposit: "))
                         account.deposit(amount)
-                        save_account(accounts)
+                        save_account_in_txt_file(accounts)
                     elif action == "3":
                         amount = float(input("Enter Amount To Withdraw: "))
                         account.withdraw(amount)
-                        save_account(accounts)
+                        save_account_in_txt_file(accounts)
                     elif action == "4":
                         transfer_money(accounts, account)
                     elif action == "5":
-                        delete_account(accounts, account.accountNumber)
+                        delete_acc(accounts, account.accountNumber)
                         break
                     elif action == "6":
                         print("\nTHANK YOU FOR USING THE APP\n")
